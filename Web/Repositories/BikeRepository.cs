@@ -18,10 +18,10 @@ public class BikeRepository
     public async Task<bool> ChangeBikeStateToRentedAsync(int bikeId, int stationId, Rental rental)
     {
         Bike? bike = await context.Bikes.FirstOrDefaultAsync(bike =>
-                bike.Id == bikeId &&
-                bike.CurrentStationId == stationId &&
-                bike.IsActive
-                );
+            bike.Id == bikeId &&
+            bike.CurrentStationId == stationId &&
+            bike.IsActive
+            );
 
         if (bike == null)
         {

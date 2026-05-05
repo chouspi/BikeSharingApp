@@ -39,6 +39,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (!ModelState.IsValid)
@@ -73,10 +74,6 @@ public class AccountController : Controller
 
             ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                principal
-            );
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
@@ -91,6 +88,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
         if (!ModelState.IsValid)
@@ -114,7 +112,7 @@ public class AccountController : Controller
         };
 
         user.PasswordHash = passwordHasher.HashPassword(user, model.Password);
-        accountService.AddUser(user);
+        await accountService.AddUser(user);
 
         TempData["SuccessMessage"] = "Registrace probehla uspesne.";
 

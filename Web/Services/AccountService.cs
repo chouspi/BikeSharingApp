@@ -42,9 +42,9 @@ public class AccountService
     {
         return await userRepository.EmailAllreadyExist(email);
     }
-    public async void AddUser(ApplicationUser user)
+    public async Task AddUser(ApplicationUser user)
     {
-        await userRepository.AddUser(user);
+         await userRepository.AddUser(user);
     }
 
     public async Task<UserProfileInfoDto?> GetProfileInfoAsync(int userId)

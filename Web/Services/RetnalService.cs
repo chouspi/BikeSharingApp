@@ -16,6 +16,7 @@ namespace Web.Services
         {
             this.rentalRepository = rentalRepository;
             this.stationRepository = stationRepository;
+            this.bikeRepository = bikeRepository;
         }
         public async Task<bool> CreateRentalAsync(int userId, int bikeId, int stationId)
         {
@@ -27,8 +28,6 @@ namespace Web.Services
                 StartedAt = DateTime.UtcNow
             };
 
-            await rentalRepository.CreateRental(rental);
-
             bool bikeChanged = await bikeRepository.ChangeBikeStateToRentedAsync(bikeId, stationId, rental);
 
             if (!bikeChanged)
@@ -36,7 +35,8 @@ namespace Web.Services
                 return false;
             }
 
-            return true;
+            return await rentalRepository.CreateRental(rental);
+
         }
     }
 }

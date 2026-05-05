@@ -14,6 +14,7 @@ namespace Web.Controllers
         }
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int bikeId, int stationId)
         {
             string? userIdText = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -27,8 +28,8 @@ namespace Web.Controllers
             {
                 return RedirectToAction("Profile", "Account");
             }
-            else
-                return View();
+            TempData["ErrorMessage"] = "Kolo se nepodarilo vypujcit.";
+            return RedirectToAction("Details", "Stations", new { id = stationId });
         }
     }
 }

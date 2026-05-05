@@ -55,23 +55,23 @@ namespace Web.Repositories
                 if (descending)
                 {
                     query = query.OrderByDescending(station =>
-                        station.Bikes.Count(bike => bike.Status == BikeStatus.Available));
+                        station.Bikes.Count(bike => bike.IsActive && bike.Status == BikeStatus.Available));
                 }
                 else
                 {
                     query = query.OrderBy(station =>
-                        station.Bikes.Count(bike => bike.Status == BikeStatus.Available));
+                        station.Bikes.Count(bike => bike.IsActive && bike.Status == BikeStatus.Available));
                 }
             }
             else if (orderBy == "totalbikes")
             {
                 if (descending)
                 {
-                    query = query.OrderByDescending(station => station.Bikes.Count());
+                    query = query.OrderByDescending(station => station.Bikes.Count(bike => bike.IsActive));
                 }
                 else
                 {
-                    query = query.OrderBy(station => station.Bikes.Count());
+                    query = query.OrderBy(station => station.Bikes.Count(bike => bike.IsActive));
                 }
             }
             else
@@ -87,8 +87,8 @@ namespace Web.Repositories
                     Address = station.Address,
                     Latitude = station.Latitude,
                     Longitude = station.Longitude,
-                    AvailableBikes = station.Bikes.Count(bike => bike.Status == BikeStatus.Available),
-                    TotalBikes = station.Bikes.Count()
+                    AvailableBikes = station.Bikes.Count(bike => bike.IsActive && bike.Status == BikeStatus.Available),
+                    TotalBikes = station.Bikes.Count(bike => bike.IsActive)
                 })
                 .ToListAsync();
         }
@@ -103,7 +103,7 @@ namespace Web.Repositories
                 Id = station.Id,
                 Name = station.Name,
 
-                TotalBikes = station.Bikes.Count(),
+                TotalBikes = station.Bikes.Count(bike => bike.IsActive),
                 AvailableBikes = station.Bikes.Count(bike => bike.IsActive && bike.Status == BikeStatus.Available),
 
                 AvailableBikesList = station.Bikes.Where(bike => bike.IsActive && bike.Status == BikeStatus.Available)
@@ -113,7 +113,7 @@ namespace Web.Repositories
                     Id = bike.Id,
                     Status = bike.Status.ToString()
                 }).ToList()
-            }).FirstAsync();
+            }).FirstOrDefaultAsync();
         }
     
         public async Task<Station> GetStationById(int id)
