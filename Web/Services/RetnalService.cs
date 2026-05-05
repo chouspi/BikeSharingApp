@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 using Web.Models;
 using Web.Repositories;
+using Web.ViewModels;
 
 namespace Web.Services
 {
@@ -37,6 +39,45 @@ namespace Web.Services
 
             return await rentalRepository.CreateRental(rental);
 
+        }
+        public async Task<CreateRentalViewModel?> GetCreateRentalFormAsync(int bikeId, int stationId)
+        {
+            Bike? bike = await bikeRepository.GetByIdAsync(bikeId);
+
+            if (bike == null)
+            {
+                return null;
+            }
+
+            if (bike.CurrentStationId != stationId)
+            {
+                return null;
+            }
+
+            if (bike.Status != BikeStatus.Available)
+            {
+                return null;
+            }
+
+            List<SelectListItem> targetStations = await stationRepository.GetTargetStationOptionsAsync();
+
+            CreateRentalViewModel model = new CreateRentalViewModel
+            {
+                BikeId = bike.Id,
+                StationId = stationId,
+                BikeCode = bike.Code,
+                StationName = bike.CurrentStation == null ? "" : bike.CurrentStation.Name,
+                TargetStationOptions = targetStations
+            };
+
+            return model;
+        }
+
+        public async Task<bool> TargetStationIsValidAsync(int stationId)
+        {
+            bool hasMoreThanThreeBikes = await stationRepository.HasMoreThanThreeBikesAsync(stationId);
+
+            return !hasMoreThanThreeBikes;
         }
     }
 }

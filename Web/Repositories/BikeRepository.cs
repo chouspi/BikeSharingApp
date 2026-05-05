@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Web.Data;
 using Web.Models;
+using Web.ViewModels;
 
 namespace Web.Repositories;
 
@@ -96,5 +97,19 @@ public class BikeRepository
     public async Task SaveChangesAsync()
     {
         await context.SaveChangesAsync();
+    }
+    public async Task<CreateRentalViewModel?> GetCreateRentalFormAsync(int bikeId, int stationId)
+    {
+        return await context.Bikes.Where(bike =>
+                bike.Id == bikeId &&
+                bike.CurrentStationId == stationId &&
+                bike.IsActive &&
+                bike.Status == BikeStatus.Available).Select(bike => new CreateRentalViewModel
+            {
+                BikeId = bike.Id,
+                StationId = stationId,
+                BikeCode = bike.Code,
+                StationName = bike.CurrentStation == null ? "" : bike.CurrentStation.Name
+            }).FirstOrDefaultAsync();
     }
 }

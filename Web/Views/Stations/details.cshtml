@@ -54,16 +54,7 @@ else
                     <td>@bike.Code</td>
                     <td>@bike.Status</td>
                     <td>
-                        <form asp-controller="Rentals" asp-action="Create" method="post">
-                            @Html.AntiForgeryToken()
-
-                            <input type="hidden" name="bikeId" value="@bike.Id" />
-                            <input type="hidden" name="stationId" value="@Model.Id" />
-
-                            <button type="submit" class="btn btn-sm btn-primary">
-                                Zapůjčit
-                            </button>
-                        </form>
+                        <a asp-controller="Rentals" asp-action="Create" asp-route-bikeId="@bike.Id" asp-route-stationId="@Model.Id">Zapůjčit</a>
                     </td>
                 </tr>
             }

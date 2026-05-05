@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
 using Web.Data;
 using Web.Dtos;
@@ -119,6 +120,20 @@ namespace Web.Repositories
         public async Task<Station> GetStationById(int id)
         {
             return await context.Stations.Where(station => station.Id == id).FirstAsync();
+        }
+        public async Task<List<SelectListItem>> GetTargetStationOptionsAsync()
+        {
+            return await context.Stations.OrderBy(station => station.Name).Select(station => new SelectListItem
+                {
+                    Value = station.Id.ToString(),
+                    Text = station.Name + " (" + station.Bikes.Count(bike => bike.IsActive) + " kol)"
+                }).ToListAsync();
+        }
+        public async Task<bool> HasMoreThanThreeBikesAsync(int stationId)
+        {
+            int bikeCount = await context.Bikes.CountAsync(bike => bike.IsActive && bike.CurrentStationId == stationId);
+
+            return bikeCount > 3;
         }
     }
 }
