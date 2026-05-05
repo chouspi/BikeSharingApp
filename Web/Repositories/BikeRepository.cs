@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Web.Data;
 using Web.Models;
 
@@ -13,6 +14,41 @@ public class BikeRepository
         this.context = context;
     }
 
+
+    public async Task<bool> ChangeBikeStateToRentedAsync(int bikeId, int stationId, Rental rental)
+    {
+        Bike? bike = await context.Bikes.FirstOrDefaultAsync(bike =>
+                bike.Id == bikeId &&
+                bike.CurrentStationId == stationId &&
+                bike.IsActive
+                );
+
+        if (bike == null)
+        {
+            return false;
+        }
+
+        if (bike.Status != BikeStatus.Available)
+        {
+            return false;
+        }
+
+        bike.Status = BikeStatus.Rented;
+        bike.CurrentStationId = null;
+
+        BikeStatusHistory history = new BikeStatusHistory
+        {
+            BikeId = bikeId,
+            NewStatus = BikeStatus.Rented,
+            StationId = stationId,
+            Rental = rental,
+            ChangedAt = DateTime.UtcNow
+        };
+
+        context.BikeStatusHistory.Add(history);
+
+        return true;
+    }
     public async Task<List<Bike>> GetAllAsync()
     {
         return await context.Bikes.Include(bike => bike.CurrentStation).Where(bike => bike.IsActive).ToListAsync();

@@ -29,6 +29,8 @@ namespace Web
             builder.Services.AddScoped<BikeRepository>();
             builder.Services.AddScoped<StationsService>();
             builder.Services.AddScoped<StationRepository>();
+            builder.Services.AddScoped<RentalRepository>();
+            builder.Services.AddScoped<RetnalService>();
 
             builder.Services.AddControllersWithViews();
 

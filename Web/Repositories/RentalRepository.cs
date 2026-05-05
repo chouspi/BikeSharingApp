@@ -5,7 +5,7 @@ using Web.Models;
 
 namespace Web.Repositories
 {
-    internal class RentalRepository
+    public class RentalRepository
     {
         AppDbContext context;
         public RentalRepository(AppDbContext context)

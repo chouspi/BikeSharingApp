@@ -93,7 +93,7 @@ namespace Web.Repositories
                 .ToListAsync();
         }
 
-        internal async Task<StationDetailDto?> GetStationDetailAsync(int id)
+        public async Task<StationDetailDto?> GetStationDetailAsync(int id)
         {
             return await context.Stations.Where(station => station.Id == id).Select(station => new StationDetailDto
             {
@@ -114,6 +114,11 @@ namespace Web.Repositories
                     Status = bike.Status.ToString()
                 }).ToList()
             }).FirstAsync();
+        }
+    
+        public async Task<Station> GetStationById(int id)
+        {
+            return await context.Stations.Where(station => station.Id == id).FirstAsync();
         }
     }
 }
