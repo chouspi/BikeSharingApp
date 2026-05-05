@@ -1,0 +1,57 @@
+﻿@model List<Web.Dtos.StationGridItemDto>
+
+@{
+    ViewData["Title"] = "Stanice";
+    string? currentSort = ViewBag.SortBy as string;
+    bool descending = ViewBag.Descending == true;
+
+    string GetSortUrl(string column)
+    {
+        bool nextDescending = currentSort == column && !descending;
+
+        return Url.Action("Index", "Stations", new
+        {
+            sortBy = column,
+            descending = nextDescending
+        })!;
+    }
+}
+
+<h1>Stanoviste kol</h1>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>
+                <a href="@GetSortUrl("name")">Nazev</a>
+            </th>
+            <th>
+                <a href="@GetSortUrl("address")">Adresa</a>
+            </th>
+            <th>GPS</th>
+            <th>
+                <a href="@GetSortUrl("available")">Dostupna kola</a>
+            </th>
+            <th>
+                <a href="@GetSortUrl("total")">Celkem kol</a>
+            </th>
+            <th>Akce</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var station in Model)
+        {
+            <tr>
+                <td>@station.Name</td>
+                <td>@station.Address</td>
+                <td>@station.Latitude, @station.Longitude</td>
+                <td>@station.AvailableBikes</td>
+                <td>@station.TotalBikes</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-controller="Stations" asp-action="Details" asp-route-id="@station.Id">Detail</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

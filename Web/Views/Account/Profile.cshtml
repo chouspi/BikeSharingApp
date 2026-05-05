@@ -1,0 +1,156 @@
+﻿@{
+    ViewData["Title"] = "Muj profil";
+}
+
+<h1>Muj profil</h1>
+
+<div id="profileLoading" class="alert alert-info">
+    Nacitam profil...
+</div>
+
+<div id="profileError" class="alert alert-danger d-none">
+</div>
+
+<div id="profileContent" class="d-none">
+    <div class="card mb-3">
+        <div class="card-body">
+            <h4 id="fullName"></h4>
+
+            <p class="mb-1">
+                <strong>Email:</strong>
+                <span id="email"></span>
+            </p>
+
+            <p class="mb-1">
+                <strong>Registrovan od:</strong>
+                <span id="createdAt"></span>
+            </p>
+
+            <p class="mb-1">
+                <strong>Celkem vypujcek:</strong>
+                <span id="totalRentals"></span>
+            </p>
+
+            <p class="mb-1">
+                <strong>Aktivni vypujcky:</strong>
+                <span id="activeRentals"></span>
+            </p>
+
+            <p class="mb-1">
+                <strong>Ukoncene vypujcky:</strong>
+                <span id="finishedRentals"></span>
+            </p>
+
+            <button id="reloadProfileButton" class="btn btn-primary mt-3">
+                Obnovit data
+            </button>
+        </div>
+    </div>
+
+    <h3>Posledni vypujcky</h3>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Kolo</th>
+                <th>Odkud</th>
+                <th>Kam</th>
+                <th>Zacatek</th>
+                <th>Konec</th>
+                <th>Delka</th>
+                <th>Cena</th>
+                <th>Stav</th>
+            </tr>
+        </thead>
+        <tbody id="recentRentalsBody">
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        async function loadProfile() {
+            const loading = document.getElementById("profileLoading");
+            const error = document.getElementById("profileError");
+            const content = document.getElementById("profileContent");
+
+            loading.classList.remove("d-none");
+            error.classList.add("d-none");
+            content.classList.add("d-none");
+
+            try {
+                const response = await fetch('@Url.Action("ProfileData", "Account")');
+
+                if (!response.ok) {
+                    throw new Error("Profil se nepodarilo nacist.");
+                }
+
+                const data = await response.json();
+
+                document.getElementById("fullName").textContent = data.userInfo.fullName;
+                document.getElementById("email").textContent = data.userInfo.email;
+                document.getElementById("createdAt").textContent =
+                    new Date(data.userInfo.createdAt).toLocaleDateString("cs-CZ");
+
+                document.getElementById("totalRentals").textContent = data.userInfo.totalRentals;
+                document.getElementById("activeRentals").textContent = data.userInfo.activeRentals;
+                document.getElementById("finishedRentals").textContent = data.userInfo.finishedRentals;
+
+                const tbody = document.getElementById("recentRentalsBody");
+                tbody.innerHTML = "";
+
+                if (data.recentRentals.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8">Zatim nemas zadne vypujcky.</td>
+                        </tr>
+                    `;
+                } else {
+                    for (const rental of data.recentRentals) {
+                        const startedAt = new Date(rental.startedAt).toLocaleString("cs-CZ");
+                        const endedAt = rental.endedAt === null
+                            ? "-"
+                            : new Date(rental.endedAt).toLocaleString("cs-CZ");
+
+                        const duration = rental.durationMinutes === null
+                            ? "-"
+                            : rental.durationMinutes + " min";
+
+                        const price = rental.price === null
+                            ? "-"
+                            : rental.price + " Kč";
+
+                        const endStation = rental.endStation === null
+                            ? "-"
+                            : rental.endStation;
+
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${rental.bikeCode}</td>
+                                <td>${rental.startStation}</td>
+                                <td>${endStation}</td>
+                                <td>${startedAt}</td>
+                                <td>${endedAt}</td>
+                                <td>${duration}</td>
+                                <td>${price}</td>
+                                <td>${rental.status}</td>
+                            </tr>
+                        `;
+                    }
+                }
+
+                loading.classList.add("d-none");
+                content.classList.remove("d-none");
+            } catch (e) {
+                loading.classList.add("d-none");
+                error.textContent = e.message;
+                error.classList.remove("d-none");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadProfile);
+
+        document.getElementById("reloadProfileButton")
+            ?.addEventListener("click", loadProfile);
+    </script>
+}

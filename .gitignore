@@ -1,0 +1,48 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / ReSharper
+.idea/
+_ReSharper*/
+*.DotSettings.user
+
+# Entity Framework / local database files
+*.mdf
+*.ldf
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Publish output
+publish/
+*.publishsettings
+
+# Secrets and local config
+appsettings.Local.json
+appsettings.*.local.json
+secrets.json
+
+# NuGet
+*.nupkg
+packages/
+
+# Test results
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
