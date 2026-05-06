@@ -7,6 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Button x:Name="ButtonApiChecker" Content="Oveřit připojení k api" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="ButtonApiChecker_Click"/>
+        <TextBox x:Name="TextBoxApiChecker" HorizontalAlignment="Left" Margin="130,12,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="ButtonUsers" Content="Uzivatele" HorizontalAlignment="Left" Margin="7,404,0,10" Width="100" Click="ButtonUsers_Click"/>
+        <Button x:Name="ButtonStations" Content="Stanice" HorizontalAlignment="Left" Margin="117,404,0,0" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="ButtonBikes" Content="Kola" HorizontalAlignment="Left" Margin="229,404,0,0" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="ButtonRentals" Content="Vypujcky" HorizontalAlignment="Left" Margin="337,404,0,0" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="ButtonHistory" Content="Historie" HorizontalAlignment="Left" Margin="449,404,0,0" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="ButtonStatistics" Content="Statistiky" HorizontalAlignment="Left" Margin="565,404,0,0" VerticalAlignment="Top" Width="100"/>
     </Grid>
 </Window>

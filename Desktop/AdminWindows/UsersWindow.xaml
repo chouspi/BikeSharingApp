@@ -1,0 +1,40 @@
+﻿<Window x:Class="Desktop.AdminWindows.UsersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Desktop.AdminWindows"
+        mc:Ignorable="d"
+        Title="UsersWindow" Height="450" Width="800">
+    <Canvas>
+        <Button x:Name="ButtonLoad" Content="Nacist" Canvas.Left="10" Canvas.Top="10" Width="80" Height="25" Click="ButtonLoad_Click" />
+        <Button x:Name="ButtonAdd" Content="Pridat" Canvas.Left="100" Canvas.Top="10" Width="80" Height="25" />
+        <Button x:Name="ButtonEdit" Content="Upravit" Canvas.Left="190" Canvas.Top="10" Width="80" Height="25" />
+        <Button x:Name="ButtonDelete" Content="Smazat" Canvas.Left="280" Canvas.Top="10" Width="80" Height="25" />
+        <Button x:Name="ButtonSave" Content="Ulozit" Canvas.Left="370" Canvas.Top="10" Width="80" Height="25" />
+
+        <Label Content="Jmeno" Canvas.Left="10" Canvas.Top="50" />
+        <TextBox x:Name="TextBoxFirstName" Text="{Binding SelectedUser.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Canvas.Left="90" Canvas.Top="53" Width="160" Height="22" />
+
+        <Label Content="Prijmeni" Canvas.Left="270" Canvas.Top="50" />
+        <TextBox x:Name="TextBoxLastName" Text="{Binding SelectedUser.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Canvas.Left="350" Canvas.Top="53" Width="160" Height="22" />
+
+        <Label Content="Email" Canvas.Left="10" Canvas.Top="85" />
+        <TextBox x:Name="TextBoxEmail" Text="{Binding SelectedUser.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Canvas.Left="90" Canvas.Top="88" Width="250" Height="22" />
+
+        <Label Content="Heslo" Canvas.Left="360" Canvas.Top="85" />
+        <PasswordBox x:Name="PasswordBoxPassword" Canvas.Left="420" Canvas.Top="88" Width="160" Height="22" />
+
+        <TextBlock x:Name="TextBlockInfo" Canvas.Left="10" Canvas.Top="125" Width="760" Height="25" />
+
+        <DataGrid x:Name="DataGridItems" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser, Mode=TwoWay}" AutoGenerateColumns="False" Canvas.Left="10" Canvas.Top="160" Width="760" Height="240" SelectionMode="Extended" SelectionUnit="FullRow">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                <DataGridTextColumn Header="Jmeno" Binding="{Binding FirstName}" />
+                <DataGridTextColumn Header="Prijmeni" Binding="{Binding LastName}" />
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
+                <DataGridTextColumn Header="Vytvoren" Binding="{Binding CreatedAt}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Canvas>
+</Window>

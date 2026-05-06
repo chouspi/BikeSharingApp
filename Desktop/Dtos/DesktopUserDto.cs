@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Web.Models;
 
-namespace Web.Dtos
+namespace Desktop.Dtos
 {
     public class DesktopUserDto
     {
@@ -20,7 +19,5 @@ namespace Web.Dtos
         public string Email { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public List<Rental> Rentals { get; set; } = new List<Rental>();
     }
 }

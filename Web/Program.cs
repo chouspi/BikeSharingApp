@@ -9,6 +9,7 @@ using System.Text;
 using Web.Data;
 using Web.Repositories;
 using Web.Services;
+using Web.Controllers.Api.ApiRepositories;
 
 namespace Web
 {
@@ -32,6 +33,7 @@ namespace Web
                     }
                 ).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
+                    options.MapInboundClaims = false;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
@@ -61,6 +63,7 @@ namespace Web
             builder.Services.AddScoped<StationRepository>();
             builder.Services.AddScoped<RentalRepository>();
             builder.Services.AddScoped<RetnalService>();
+            builder.Services.AddScoped<ApiUserRepository>();
 
             builder.Services.AddControllersWithViews();
 

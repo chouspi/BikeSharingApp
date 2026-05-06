@@ -61,5 +61,6 @@ namespace Web.Repositories
                 return -1; //chyba
             return await context.Users.Where(u => u.Email == mail).Select(user => user.Id).FirstOrDefaultAsync();
         }
+    
     }
 }
