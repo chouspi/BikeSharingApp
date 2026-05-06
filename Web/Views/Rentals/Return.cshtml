@@ -1,0 +1,48 @@
+@model Web.ViewModels.ReturnRentalViewModel
+
+@{
+    ViewData["Title"] = "Vraceni kola";
+}
+
+<h1>Vraceni kola</h1>
+
+<form asp-controller="Rentals" asp-action="Return" method="post">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input asp-for="RentalId" type="hidden" />
+    <input asp-for="BikeCode" type="hidden" />
+    <input asp-for="StartStationName" type="hidden" />
+    <input asp-for="StartedAt" type="hidden" />
+
+    <p>Kolo: @Model.BikeCode</p>
+    <p>Odkud: @Model.StartStationName</p>
+    <p>Zacatek: @Model.StartedAt</p>
+
+    <p>
+        <label asp-for="EndStationId">Stanice vraceni</label>
+        <select asp-for="EndStationId" asp-items="Model.StationOptions">
+            <option value="">-- vyber --</option>
+        </select>
+        <span asp-validation-for="EndStationId" class="text-danger"></span>
+    </p>
+
+    <p>
+        <label asp-for="Note">Poznamka</label><br />
+        <textarea asp-for="Note"></textarea>
+    </p>
+
+    <p>
+        <input asp-for="ConfirmReturn" />
+        <label asp-for="ConfirmReturn">Opravdu vracim kolo</label>
+        <span asp-validation-for="ConfirmReturn" class="text-danger"></span>
+    </p>
+
+    <button type="submit">Vratit</button>
+</form>
+
+<a asp-controller="Account" asp-action="Profile">Zpet</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -79,5 +79,32 @@ namespace Web.Services
 
             return !hasMoreThanThreeBikes;
         }
+        public async Task<ReturnRentalViewModel?> GetReturnRentalFormAsync(int rentalId,int userId)
+        {
+            Rental? rental = await rentalRepository.GetRentalForReturnAsync(rentalId, userId);
+
+            if (rental == null)
+                return null;
+
+            if (rental.EndedAt != null)
+                return null;
+
+            List<SelectListItem> stations = await stationRepository.GetTargetStationOptionsAsync();
+
+            ReturnRentalViewModel model = new ReturnRentalViewModel
+            {
+                RentalId = rental.Id,
+                BikeCode = rental.Bike.Code,
+                StartStationName = rental.StartStation.Name,
+                StartedAt = rental.StartedAt,
+                StationOptions = stations
+            };
+
+            return model;
+        }
+        public async Task<bool> ReturnRentalAsync(int rentalId,int userId,int stationId)
+        {
+            return await rentalRepository.ReturnRentalAsync(rentalId, userId, stationId);
+        }
     }
 }

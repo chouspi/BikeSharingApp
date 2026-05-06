@@ -2,6 +2,7 @@
 
 public class RecentRentalDto
 {
+    public int Id { get; set; }
     public string BikeCode { get; set; } = "";
     public string StartStation { get; set; } = "";
     public string? EndStation { get; set; }

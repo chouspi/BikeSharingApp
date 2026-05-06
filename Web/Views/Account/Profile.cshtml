@@ -60,6 +60,7 @@
                 <th>Delka</th>
                 <th>Cena</th>
                 <th>Stav</th>
+                <th>Akce</th>
             </tr>
         </thead>
         <tbody id="recentRentalsBody">
@@ -102,7 +103,7 @@
                 if (data.recentRentals.length === 0) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="8">Zatim nemas zadne vypujcky.</td>
+                            <td colspan="9">Zatim nemas zadne vypujcky.</td>
                         </tr>
                     `;
                 } else {
@@ -124,6 +125,10 @@
                             ? "-"
                             : rental.endStation;
 
+                        const action = rental.endedAt === null
+                            ? `<a href="@Url.Action("Return", "Rentals")?rentalId=${rental.id}">Vratit</a>`
+                            : "-";
+
                         tbody.innerHTML += `
                             <tr>
                                 <td>${rental.bikeCode}</td>
@@ -134,6 +139,7 @@
                                 <td>${duration}</td>
                                 <td>${price}</td>
                                 <td>${rental.status}</td>
+                                <td>${action}</td>
                             </tr>
                         `;
                     }

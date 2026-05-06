@@ -135,5 +135,17 @@ namespace Web.Repositories
 
             return bikeCount > 3;
         }
+        public async Task<List<StationStatisticDto>> GetStationStatisticsAsync()
+        {
+            DateTime from = DateTime.UtcNow.AddMonths(-1);
+
+            return await context.Stations.Select(station => new StationStatisticDto
+            {
+                StationId = station.Id,
+                StationName = station.Name,
+                StartedCount = station.StartedRentals.Count(rental => rental.StartedAt >= from),
+                FinishedCount = station.FinishedRentals.Count(rental => rental.EndedAt != null && rental.EndedAt >= from)
+            }).ToListAsync();
+        }
     }
 }

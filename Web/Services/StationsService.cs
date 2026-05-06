@@ -19,5 +19,9 @@ namespace Web.Services
         {
             return await repository.GetStationDetailAsync(id);
         }
+        public async Task<List<StationStatisticDto>> GetStationStatisticsAsync()
+        {
+            return await repository.GetStationStatisticsAsync();
+        }
     }
 }

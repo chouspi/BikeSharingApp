@@ -43,6 +43,7 @@ namespace Web.Repositories
         {
             return await context.Rentals.Where(rental => rental.UserId == userId).OrderByDescending(Rental => Rental.StartedAt).Take(count).Select(rental => new RecentRentalDto
             {
+                Id = rental.Id,
                 BikeCode = rental.Bike.Code,
                 StartStation = rental.StartStation.Name,
                 EndStation = rental.EndStation == null ? null : rental.EndStation.Name,

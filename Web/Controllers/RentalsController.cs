@@ -87,5 +87,75 @@ namespace Web.Controllers
             TempData["SuccessMessage"] = "Kolo bylo uspesne zapujceno.";
             return RedirectToAction("Profile", "Account");
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Return(int rentalId)
+        {
+            string? userIdText = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!int.TryParse(userIdText, out int userId))
+            {
+                return Unauthorized();
+            }
+
+            ReturnRentalViewModel? model = await retnalService.GetReturnRentalFormAsync(rentalId, userId);
+
+            if (model == null)
+            {
+                TempData["ErrorMessage"] = "Vypujcka nejde vratit.";
+                return RedirectToAction("Profile", "Account");
+            }
+
+            return View(model);
+        }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Return(ReturnRentalViewModel model)
+        {
+            if (!model.ConfirmReturn)
+            {
+                ModelState.AddModelError(nameof(model.ConfirmReturn), "Musis potvrdit vraceni.");
+            }
+
+            if (model.EndStationId == null)
+            {
+                ModelState.AddModelError(nameof(model.EndStationId), "Vyber stanici.");
+            }
+
+            string? userIdText = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!int.TryParse(userIdText, out int userId))
+            {
+                return Unauthorized();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ReturnRentalViewModel? reloadedModel = await retnalService.GetReturnRentalFormAsync(model.RentalId, userId);
+
+                if (reloadedModel == null)
+                {
+                    return RedirectToAction("Profile", "Account");
+                }
+
+                reloadedModel.EndStationId = model.EndStationId;
+                reloadedModel.Note = model.Note;
+                reloadedModel.ConfirmReturn = model.ConfirmReturn;
+
+                return View(reloadedModel);
+            }
+
+            bool success = await retnalService.ReturnRentalAsync(model.RentalId, userId, model.EndStationId.Value);
+
+            if (!success)
+            {
+                TempData["ErrorMessage"] = "Kolo se nepodarilo vratit.";
+                return RedirectToAction("Profile", "Account");
+            }
+
+            TempData["SuccessMessage"] = "Kolo bylo vraceno.";
+            return RedirectToAction("Profile", "Account");
+        }
     }
 }

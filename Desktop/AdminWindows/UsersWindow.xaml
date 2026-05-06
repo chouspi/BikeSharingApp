@@ -8,7 +8,7 @@
         Title="UsersWindow" Height="450" Width="800">
     <Canvas>
         <Button x:Name="ButtonLoad" Content="Nacist" Canvas.Left="10" Canvas.Top="10" Width="80" Height="25" Click="ButtonLoad_Click" />
-        <Button x:Name="ButtonAdd" Content="Pridat" Canvas.Left="100" Canvas.Top="10" Width="80" Height="25" />
+        <Button x:Name="ButtonAdd" Content="Pridat" Canvas.Left="100" Canvas.Top="10" Width="80" Height="25" Click="ButtonAdd_Click" />
         <Button x:Name="ButtonEdit" Content="Upravit" Canvas.Left="190" Canvas.Top="10" Width="80" Height="25" />
         <Button x:Name="ButtonDelete" Content="Smazat" Canvas.Left="280" Canvas.Top="10" Width="80" Height="25" />
         <Button x:Name="ButtonSave" Content="Ulozit" Canvas.Left="370" Canvas.Top="10" Width="80" Height="25" />

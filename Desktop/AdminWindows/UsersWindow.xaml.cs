@@ -58,12 +58,17 @@ namespace Desktop.AdminWindows
 
             Users.Clear();
 
+            if (users == null)
+            {
+                return;
+            }
+
             foreach (var user in users)
             {
                 Users.Add(user);
             }
         }
-        priva
+
         private List<DesktopUserDto> GetSelectedItems()
         {
             return DataGridItems.SelectedItems.Cast<DesktopUserDto>().ToList();
@@ -72,6 +77,38 @@ namespace Desktop.AdminWindows
         private async void ButtonLoad_Click(object sender, RoutedEventArgs e)
         {
             await FetchAllUsers();
+        }
+
+        private async void ButtonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            DesktopUserDto user = new DesktopUserDto();
+            user.FirstName = TextBoxFirstName.Text;
+            user.LastName = TextBoxLastName.Text;
+            user.Email = TextBoxEmail.Text;
+
+            var request = new
+            {
+                User = user,
+                Password = PasswordBoxPassword.Password
+            };
+
+            var response = await client.PostAsJsonAsync("api/users/UserAdd", request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TextBlockInfo.Text = await response.Content.ReadAsStringAsync();
+                return;
+            }
+
+            DesktopUserDto? createdUser = await response.Content.ReadFromJsonAsync<DesktopUserDto>();
+
+            if (createdUser != null)
+            {
+                Users.Add(createdUser);
+                SelectedUser = createdUser;
+                TextBlockInfo.Text = "Uzivatel pridan.";
+                PasswordBoxPassword.Password = "";
+            }
         }
     }
 }
