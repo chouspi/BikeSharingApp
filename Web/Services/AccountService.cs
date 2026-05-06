@@ -18,6 +18,7 @@ public class AccountService
         this .userRepository = userRepository;
     }
 
+    // Overi heslo uzivatele.
     public async Task<ApplicationUser?> LoginAsync(string email, string password)
     {
         string normalizedEmail = email.Trim().ToLowerInvariant();
@@ -47,10 +48,12 @@ public class AccountService
          await userRepository.AddUser(user);
     }
 
+    // Nacte souhrn profilu.
     public async Task<UserProfileInfoDto?> GetProfileInfoAsync(int userId)
     {
         return await userRepository.GetProfileInfoAsync(userId);
     }
+    // Nacte posledni vypujcky.
     public async Task<List<RecentRentalDto>> GetRecentRentalDtos(int userId,int count)
     {
         return await userRepository.GetRecentUserRentals(userId, count);
@@ -59,6 +62,7 @@ public class AccountService
     {
         return await userRepository.GetUserByIdAsync(userId);
     }
+    // Najde uzivatele podle emailu.
     public async Task<ApplicationUser> GetUser(string email)
     {
         int id = await userRepository.GetUserIDFromEmailAsync(email);

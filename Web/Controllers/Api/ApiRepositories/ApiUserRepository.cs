@@ -18,6 +18,7 @@ namespace Web.Controllers.Api.ApiRepositories
             this.context = context;
         }
 
+        // Vrati usery pro desktop grid.
         public async Task<List<DesktopUserDto>> ApiGetAllUsersAsync()
         {
             return await context.Users.Select(u => new DesktopUserDto
@@ -31,12 +32,14 @@ namespace Web.Controllers.Api.ApiRepositories
 
 
         }
+        // Kontroluje duplicitni email.
         public async Task<bool> ApiEmailAllreadyExist(string email)
         {
             string normalizedEmail = email.Trim().ToLower();
             return await context.Users.AnyAsync(u => u.Email == normalizedEmail);
         }
 
+        // Ulozi usera a hash hesla.
         public async Task<DesktopUserDto> ApiCreateUserAsync(DesktopUserDto user,string password)
         {
             ApplicationUser newUser = new ApplicationUser
@@ -59,12 +62,14 @@ namespace Web.Controllers.Api.ApiRepositories
             return user;
         }
 
+        // Hlida email pri editaci.
         public async Task<bool> ApiEmailUsedByOtherUser(string email, int id)
         {
             string normalizedEmail = email.Trim().ToLower();
             return await context.Users.AnyAsync(u => u.Email == normalizedEmail && u.Id != id);
         }
 
+        // Prepise zakladni udaje usera.
         public async Task<DesktopUserDto?> ApiUpdateUserAsync(int id, DesktopUserDto user)
         {
             ApplicationUser? oldUser = await context.Users.FirstOrDefaultAsync(u => u.Id == id);
@@ -87,6 +92,7 @@ namespace Web.Controllers.Api.ApiRepositories
             return user;
         }
 
+        // Maze jen usera bez historie.
         public async Task<string> ApiDeleteUserAsync(int id)
         {
             ApplicationUser? user = await context.Users.FirstOrDefaultAsync(u => u.Id == id);
@@ -100,6 +106,7 @@ namespace Web.Controllers.Api.ApiRepositories
 
             if (hasRentals)
             {
+                // Historie vypujcek se nemaze.
                 return "rentals";
             }
 

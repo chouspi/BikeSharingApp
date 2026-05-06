@@ -23,6 +23,7 @@ public class AccountController : Controller
         this.accountService = accountService;
     }
 
+    // Odhlasi aktualniho uzivatele.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
@@ -38,6 +39,7 @@ public class AccountController : Controller
         return View(new LoginViewModel());
     }
 
+    // Overi prihlaseni a zalozi cookie.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel model)
@@ -87,6 +89,7 @@ public class AccountController : Controller
         return View(new RegisterViewModel());
     }
 
+    // Vytvori noveho uzivatle.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel model)
@@ -125,6 +128,7 @@ public class AccountController : Controller
     {
         return View();
     }
+    // Vrati data profilu pro AJAX.
     [Authorize]
     [HttpGet]
     public async Task<IActionResult> ProfileData()

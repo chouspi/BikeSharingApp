@@ -13,6 +13,7 @@ namespace Web.Repositories
         {
             this.context = context;
         }
+        // Ulozi novou vypujcku.
         public async Task<bool> CreateRental(Rental rental)
         {
             context.Rentals.Add(rental);
@@ -22,14 +23,17 @@ namespace Web.Repositories
             else 
                 return false;
         }
+        // Vrati vypujcky uzivatele.
         public async Task<List<Rental>> GetAllUserRentals(int userId)
         {
             return await context.Rentals.Where(rental => rental.UserId == userId).ToListAsync();
         }
+        // Nacte vypujcku pro vraceni.
         public async Task<Rental?> GetRentalForReturnAsync(int rentalId,int userId)
         {
             return await context.Rentals.Include(rental => rental.Bike).Include(rental => rental.StartStation).Where(rental => rental.Id == rentalId && rental.UserId == userId).FirstOrDefaultAsync();
         }
+        // Uzavre vypujcku a uvolni kolo.
         public async Task<bool> ReturnRentalAsync(int rentalId,int userId,int stationId)
         {
             Rental? rental = await context.Rentals.Include(rental => rental.Bike).Where(rental => rental.Id == rentalId && rental.UserId == userId).FirstOrDefaultAsync();
@@ -49,6 +53,7 @@ namespace Web.Repositories
                 return false;
 
             DateTime endTime = DateTime.UtcNow;
+            // Kratke pujceni je aspon 1 minuta.
             int duration = (int)Math.Ceiling((endTime - rental.StartedAt).TotalMinutes);
 
             if (duration < 1)
@@ -62,6 +67,7 @@ namespace Web.Repositories
             rental.Bike.Status = BikeStatus.Available;
             rental.Bike.CurrentStationId = stationId;
 
+            // Historie drzi zmenu stavu kola.
             BikeStatusHistory history = new BikeStatusHistory
             {
                 BikeId = rental.BikeId,

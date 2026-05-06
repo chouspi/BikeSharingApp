@@ -11,6 +11,7 @@ namespace Web.Controllers
         {
             this.stationsService = stationsService;
         }
+        // Zobrazi mesicni statistiku stanic.
         [HttpGet]
         public async Task<IActionResult> Index()
         {

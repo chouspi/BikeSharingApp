@@ -17,6 +17,7 @@ public class AppDbContext : DbContext
 
 
 
+    // Nastavi vazby a seed databaze.
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

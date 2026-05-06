@@ -16,6 +16,7 @@ public class BikeRepository
     }
 
 
+    // Prenastavi dostupne kolo na pujcene.
     public async Task<bool> ChangeBikeStateToRentedAsync(int bikeId, int stationId, Rental rental)
     {
         Bike? bike = await context.Bikes.FirstOrDefaultAsync(bike =>
@@ -35,6 +36,7 @@ public class BikeRepository
         }
 
         bike.Status = BikeStatus.Rented;
+        // Pujcene kolo ted nema stanici.
         bike.CurrentStationId = null;
 
         BikeStatusHistory history = new BikeStatusHistory
@@ -46,6 +48,7 @@ public class BikeRepository
             ChangedAt = DateTime.UtcNow
         };
 
+        // SaveChanges dela az vypujcka.
         context.BikeStatusHistory.Add(history);
 
         return true;
@@ -55,6 +58,7 @@ public class BikeRepository
         return await context.Bikes.Include(bike => bike.CurrentStation).Where(bike => bike.IsActive).ToListAsync();
     }
 
+    // Nacte dostupna kola stanice.
     public async Task<List<Bike>> GetAvailableByStationAsync(int stationId)
     {
         return await context.Bikes.Where(bike => bike.IsActive && bike.CurrentStationId == stationId && bike.Status == BikeStatus.Available)
@@ -66,6 +70,7 @@ public class BikeRepository
         return await context.Bikes.Include(bike => bike.CurrentStation).FirstOrDefaultAsync(bike => bike.Id == id && bike.IsActive);
     }
 
+    // Najde kolo podle kodu.
     public async Task<Bike?> GetByCodeAsync(string code)
     {
         return await context.Bikes
@@ -73,6 +78,7 @@ public class BikeRepository
             .FirstOrDefaultAsync(bike => bike.Code == code && bike.IsActive);
     }
 
+    // Kontroluje unikatni kod kola.
     public async Task<bool> CodeExistsAsync(string code, int? ignoredBikeId = null)
     {
         return await context.Bikes.AnyAsync(bike =>
@@ -98,6 +104,7 @@ public class BikeRepository
     {
         await context.SaveChangesAsync();
     }
+    // Slozi data pro pujceni kola.
     public async Task<CreateRentalViewModel?> GetCreateRentalFormAsync(int bikeId, int stationId)
     {
         return await context.Bikes.Where(bike =>

@@ -24,9 +24,11 @@ namespace Web.Repositories
         {
             return await context.Stations.FirstOrDefaultAsync(s => s.Id == id);
         }
+        // Vrati stanice serazene v DB.
         public async Task<List<StationGridItemDto>> GetStationGridAsync(string orderBy, bool descending)
         {
             IQueryable<Station> query = context.Stations;
+            // Sort prijde z odkazu v tabulce.
             orderBy = orderBy.ToLower().Trim();
 
             if (orderBy == "name")
@@ -94,6 +96,7 @@ namespace Web.Repositories
                 .ToListAsync();
         }
 
+        // Vrati detail s dostupnymi koly.
         public async Task<StationDetailDto?> GetStationDetailAsync(int id)
         {
             return await context.Stations.Where(station => station.Id == id).Select(station => new StationDetailDto
@@ -121,6 +124,7 @@ namespace Web.Repositories
         {
             return await context.Stations.Where(station => station.Id == id).FirstAsync();
         }
+        // Pripravi volby stanic do selectu.
         public async Task<List<SelectListItem>> GetTargetStationOptionsAsync()
         {
             return await context.Stations.OrderBy(station => station.Name).Select(station => new SelectListItem
@@ -129,12 +133,14 @@ namespace Web.Repositories
                     Text = station.Name + " (" + station.Bikes.Count(bike => bike.IsActive) + " kol)"
                 }).ToListAsync();
         }
+        // Hlida preplnenou stanici.
         public async Task<bool> HasMoreThanThreeBikesAsync(int stationId)
         {
             int bikeCount = await context.Bikes.CountAsync(bike => bike.IsActive && bike.CurrentStationId == stationId);
 
             return bikeCount > 3;
         }
+        // Spocita mesicni pohyby kol.
         public async Task<List<StationStatisticDto>> GetStationStatisticsAsync()
         {
             DateTime from = DateTime.UtcNow.AddMonths(-1);

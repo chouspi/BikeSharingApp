@@ -20,6 +20,7 @@ namespace Web.Services
             this.stationRepository = stationRepository;
             this.bikeRepository = bikeRepository;
         }
+        // Zalozi vypujcku a zamkne kolo.
         public async Task<bool> CreateRentalAsync(int userId, int bikeId, int stationId)
         {
             Rental rental = new Rental
@@ -40,6 +41,7 @@ namespace Web.Services
             return await rentalRepository.CreateRental(rental);
 
         }
+        // Pripravi formular zapujceni.
         public async Task<CreateRentalViewModel?> GetCreateRentalFormAsync(int bikeId, int stationId)
         {
             Bike? bike = await bikeRepository.GetByIdAsync(bikeId);
@@ -73,12 +75,14 @@ namespace Web.Services
             return model;
         }
 
+        // Hlida prepneni cile podle poctu kol.
         public async Task<bool> TargetStationIsValidAsync(int stationId)
         {
             bool hasMoreThanThreeBikes = await stationRepository.HasMoreThanThreeBikesAsync(stationId);
 
             return !hasMoreThanThreeBikes;
         }
+        // Pripravi formular vraceni.
         public async Task<ReturnRentalViewModel?> GetReturnRentalFormAsync(int rentalId,int userId)
         {
             Rental? rental = await rentalRepository.GetRentalForReturnAsync(rentalId, userId);
@@ -102,6 +106,7 @@ namespace Web.Services
 
             return model;
         }
+        // Preda vraceni do uloziste.
         public async Task<bool> ReturnRentalAsync(int rentalId,int userId,int stationId)
         {
             return await rentalRepository.ReturnRentalAsync(rentalId, userId, stationId);

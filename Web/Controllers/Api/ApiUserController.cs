@@ -19,6 +19,7 @@ namespace Web.Controllers.Api
             this.usersRepository = usersRepository;
         }
 
+        // Vrati uzivatele pro admin API.
         [HttpGet("AllUsers")]
         public async Task<ActionResult<List<DesktopUserDto>>> GetAllUsers()
         {
@@ -27,6 +28,7 @@ namespace Web.Controllers.Api
             return Ok(users);
         }
 
+        // Prida uzivatele z desktopu.
         [HttpPost("UserAdd")]
         public async Task<ActionResult<DesktopUserDto>> CreateUser(CreateUserApiRequest request)
         {
@@ -62,6 +64,7 @@ namespace Web.Controllers.Api
             return Ok(createdUser);
         }
 
+        // Upravi zakladni udaje uzivatele.
         [HttpPut("UserEdit/{id}")]
         public async Task<ActionResult<DesktopUserDto>> EditUser(int id, DesktopUserDto user)
         {
@@ -97,6 +100,7 @@ namespace Web.Controllers.Api
             return Ok(updatedUser);
         }
 
+        // Smaze uzivatele bez vypujcek.
         [HttpDelete("UserDelete/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

@@ -14,6 +14,7 @@ namespace Web.Controllers
         }
 
         
+        // Vybere uvod podle prihlaseni.
         public IActionResult Index()
         {
             if(User.Identity?.IsAuthenticated == true)

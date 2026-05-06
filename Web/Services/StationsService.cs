@@ -11,14 +11,17 @@ namespace Web.Services
         {
             this.repository = repository;
         }
+        // Nacte grid stanic.
         public async Task<List<StationGridItemDto>> GetStationGridAsync(string sortBy,bool descending)
         {
             return await repository.GetStationGridAsync(sortBy, descending);
         }
+        // Nacte detail stanice.
         public async Task<StationDetailDto?> GetStationDetailAsync(int id)
         {
             return await repository.GetStationDetailAsync(id);
         }
+        // Nacte statistiku stanic.
         public async Task<List<StationStatisticDto>> GetStationStatisticsAsync()
         {
             return await repository.GetStationStatisticsAsync();

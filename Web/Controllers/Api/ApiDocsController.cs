@@ -9,12 +9,14 @@ namespace Web.Controllers.Api
     [Route("api/docs")]
     public class ApiDocsController : ControllerBase
     {
+        // Vypise API podle reflexe.
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Index()
         {
             List<ApiDocItem> docs = new List<ApiDocItem>();
 
+            // Reflexe bere jen API controllery.
             List<Type> controllers = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(t => typeof(ControllerBase).IsAssignableFrom(t))
                 .Where(t => t.Namespace != null && t.Namespace.StartsWith("Web.Controllers.Api"))
@@ -39,6 +41,7 @@ namespace Web.Controllers.Api
                 {
                     List<HttpMethodAttribute> httpAttributes = method.GetCustomAttributes<HttpMethodAttribute>().ToList();
 
+                    // Jedna akce muze mit vic HTTP atributu.
                     foreach (HttpMethodAttribute httpAttribute in httpAttributes)
                     {
                         ApiDocItem item = new ApiDocItem();
@@ -62,6 +65,7 @@ namespace Web.Controllers.Api
             return Ok(docs);
         }
 
+        // Slozi celou routu endpointu.
         private string GetFullRoute(string controllerRoute, string? actionRoute)
         {
             string route = controllerRoute;
@@ -74,6 +78,7 @@ namespace Web.Controllers.Api
             return "/" + route.Trim('/');
         }
 
+        // Vytahne parametry metody.
         private List<string> GetParameters(MethodInfo method)
         {
             List<string> parameters = new List<string>();
@@ -86,6 +91,7 @@ namespace Web.Controllers.Api
             return parameters;
         }
 
+        // Spoji role z autorizace.
         private List<string> GetRoles(List<AuthorizeAttribute> controllerAuthorize, List<AuthorizeAttribute> methodAuthorize)
         {
             List<string> roles = new List<string>();

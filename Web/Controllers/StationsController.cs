@@ -11,6 +11,7 @@ namespace Web.Controllers
         {
             this.stationService = service;
         }
+        // Zobrazi stanoviste s razenim.
         [HttpGet]
         public async Task<IActionResult> Index(string? sortBy, bool descending = false)
         {
@@ -18,6 +19,7 @@ namespace Web.Controllers
 
             return View(stations);
         }
+        // Zobrazi detail jedne stanice.
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {

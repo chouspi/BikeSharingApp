@@ -17,6 +17,7 @@ namespace Web.Repositories
         {
             return await context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
+        // Kontroluje obsazeny email.
         public async Task<bool> EmailAllreadyExist(string email)
         {
             string normalizedEmail = email.Trim().ToLowerInvariant();
@@ -27,6 +28,7 @@ namespace Web.Repositories
             context.Users.Add(user);
             await context.SaveChangesAsync();
         }
+        // Sklada cisla do profilu.
         public async Task<UserProfileInfoDto?> GetProfileInfoAsync(int userId)
         {
             return await context.Users.Where(user => user.Id == userId).Select(user => new UserProfileInfoDto
@@ -39,6 +41,7 @@ namespace Web.Repositories
                     FinishedRentals = user.Rentals.Count(rental => rental.EndedAt != null)
                 }).FirstOrDefaultAsync();
         }
+        // Vrati posledni jizdy uzivatele.
         public async Task<List<RecentRentalDto>> GetRecentUserRentals(int userId,int count)
         {
             return await context.Rentals.Where(rental => rental.UserId == userId).OrderByDescending(Rental => Rental.StartedAt).Take(count).Select(rental => new RecentRentalDto
@@ -56,6 +59,7 @@ namespace Web.Repositories
 
                 ).ToListAsync();
         }
+        // Prevede email na id.
         public async Task<int> GetUserIDFromEmailAsync(string mail)
         {
             if (await EmailAllreadyExist(mail) == false)

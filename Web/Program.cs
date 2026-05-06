@@ -15,6 +15,7 @@ namespace Web
 {
     public class Program
     {
+        // Nastartuje web a sluzby.
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,7 @@ namespace Web
                     }
                 ).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
+                    // Bez toho se role z JWT prejemnuje.
                     options.MapInboundClaims = false;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {

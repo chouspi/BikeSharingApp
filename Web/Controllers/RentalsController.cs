@@ -13,6 +13,7 @@ namespace Web.Controllers
         {
             this.retnalService = retnalService;
         }
+        // Nacte formular zapujceni kola.
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Create(int bikeId, int stationId)
@@ -27,6 +28,7 @@ namespace Web.Controllers
 
             return View(model);
         }
+        // Zkontroluje a ulozi zapujceni.
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -87,6 +89,7 @@ namespace Web.Controllers
             TempData["SuccessMessage"] = "Kolo bylo uspesne zapujceno.";
             return RedirectToAction("Profile", "Account");
         }
+        // Nacte formular vraceni kola.
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Return(int rentalId)
@@ -108,6 +111,7 @@ namespace Web.Controllers
 
             return View(model);
         }
+        // Ukonci vypujcku a vrati kolo.
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]

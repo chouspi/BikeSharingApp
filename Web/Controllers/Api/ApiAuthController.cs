@@ -16,6 +16,7 @@ public class ApiAuthController : ControllerBase
         this.configuration = configuration;
     }
 
+    // Vytvori JWT pro desktop admina.
     [HttpPost("token")]
     public IActionResult Token(AdminLoginRequest request)
     {
@@ -34,6 +35,7 @@ public class ApiAuthController : ControllerBase
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         long expires = DateTimeOffset.UtcNow.AddMinutes(expiresMinutes).ToUnixTimeSeconds();
 
+        // JWT se sklada rucne pres JSON.
         Dictionary<string, object> header = new Dictionary<string, object>();
         header["alg"] = "HS256";
         header["typ"] = "JWT";
@@ -49,6 +51,7 @@ public class ApiAuthController : ControllerBase
 
         string unsignedToken = Base64Url(JsonSerializer.SerializeToUtf8Bytes(header)) + "." + Base64Url(JsonSerializer.SerializeToUtf8Bytes(payload));
 
+        // Podpis je jen z prvnich dvou casti.
         byte[] signatureBytes = new HMACSHA256(Encoding.UTF8.GetBytes(key)).ComputeHash(Encoding.UTF8.GetBytes(unsignedToken));
 
         string token = unsignedToken + "." + Base64Url(signatureBytes);
@@ -56,6 +59,7 @@ public class ApiAuthController : ControllerBase
         return Ok(new { token });
     }
 
+    // Prevede podpis do JWT tvaru.
     private static string Base64Url(byte[] bytes)
     {
         return Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
